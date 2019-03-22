@@ -1,7 +1,9 @@
 import Vapor
+import FluentSQLite
 
 /// Register your application's routes here.
 public func routes(_ router: Router) throws {
+    print(router)
     // Basic "It works" example
     router.get { req in
         return "It works!"
@@ -14,7 +16,8 @@ public func routes(_ router: Router) throws {
 
     // Example of configuring a controller
     let todoController = TodoController()
-    router.get("todos", use: todoController.index)
-    router.post("todos", use: todoController.create)
-    router.delete("todos", Todo.parameter, use: todoController.delete)
+    router.get("api/todos", use: todoController.index)
+    router.post("api/todos", use: todoController.create)
+    router.put("api/todos", Todo.parameter, use: todoController.update)
+    router.delete("api/todos", Todo.parameter, use: todoController.delete)
 }

@@ -13,6 +13,19 @@ final class TodoController {
             return todo.save(on: req)
         }
     }
+    
+    func update(_ req: Request) throws -> Future<Todo> {
+        return try req.parameters.next(Todo.self).flatMap { existing in
+            return try req.content.decode(Todo.self).flatMap { incoming in
+                existing.title = incoming.title
+                existing.details = incoming.details
+                existing.category = incoming.category
+                existing.completed = incoming.completed
+                existing.priority = incoming.priority
+                return existing.save(on: req)
+            }
+        }
+    }
 
     /// Deletes a parameterized `Todo`.
     func delete(_ req: Request) throws -> Future<HTTPStatus> {
@@ -20,4 +33,5 @@ final class TodoController {
             return todo.delete(on: req)
         }.transform(to: .ok)
     }
+
 }
